@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日報入力フォーム</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <h1>日報を記入してください</h1>
+
+    <h2>今日のハイライト</h2>
+    <textarea id="highlight" rows="4" cols="50"></textarea>
+
+    <h2>振り返り</h2>
+    <h3>【良かったこと】</h3>
+    <textarea id="good" rows="4" cols="50"></textarea>
+
+    <h3>【改善できること】</h3>
+    <textarea id="improvement" rows="4" cols="50"></textarea>
+
+    <h3>【一日一善】</h3>
+    <textarea id="kindness" rows="4" cols="50"></textarea>
+
+    <h3>【その他】</h3>
+    <textarea id="others" rows="4" cols="50"></textarea>
+
+    <br>
+    <button id="saveButton">日報を保存</button>
+
+    <h2>保存された日報</h2>
+    <div id="storedReport"></div>
+
+<script>
+// ボタンがクリックされたときの処理
+$("#saveButton").on('click', function() {
+    // 入力された内容を取得
+    var highlight = $("#highlight").val();
+    var good = $("#good").val();
+    var improvement = $("#improvement").val();
+    var kindness = $("#kindness").val();
+    var others = $("#others").val();
+
+    // 入力内容をまとめてローカルストレージに保存
+    localStorage.setItem("highlight", highlight);
+    localStorage.setItem("good", good);
+    localStorage.setItem("improvement", improvement);
+    localStorage.setItem("kindness", kindness);
+    localStorage.setItem("others", others);
+
+    // 入力フォームをリセット
+    $("#highlight").val("");
+    $("#good").val("");
+    $("#improvement").val("");
+    $("#kindness").val("");
+    $("#others").val("");
+
+    // 保存した日報を再表示
+    displayReport();
+});
+
+// ページが読み込まれたときに保存された日報を表示
+$(document).ready(function() {
+    displayReport();
+});
+
+// 保存された日報を表示する関数
+function displayReport() {
+    var highlight = localStorage.getItem("highlight");
+    var good = localStorage.getItem("good");
+    var improvement = localStorage.getItem("improvement");
+    var kindness = localStorage.getItem("kindness");
+    var others = localStorage.getItem("others");
+
+    // 保存された内容があれば表示
+    if (highlight && good && improvement && kindness && others) {
+        var reportHtml = "<h3>今日のハイライト</h3>" + highlight + "<br>";
+        reportHtml += "<h3>振り返り</h3>";
+        reportHtml += "<strong>【良かったこと】</strong><br>" + good + "<br>";
+        reportHtml += "<strong>【改善できること】</strong><br>" + improvement + "<br>";
+        reportHtml += "<strong>【一日一善】</strong><br>" + kindness + "<br>";
+        reportHtml += "<strong>【その他】</strong><br>" + others;
+
+        $("#storedReport").html(reportHtml);
+    } else {
+        $("#storedReport").html("まだ保存された日報はありません。");
+    }
+}
+</script>
+
+</body>
+</html>
